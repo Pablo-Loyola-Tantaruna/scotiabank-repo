@@ -24,13 +24,23 @@ repositories {
 }
 
 dependencies {
+	// Spring dependencies
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// Database dependencies
+	runtimeOnly 'com.h2database:h2'
+
+	// Test dependencies
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
+	testImplementation "org.mockito:mockito-inline:3.11.2"
+	testImplementation "org.mockito:mockito-junit-jupiter:3.11.2"
+	testImplementation "org.assertj:assertj-core:3.21.0"
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
