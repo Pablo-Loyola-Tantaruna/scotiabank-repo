@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * <p><b>Package</b>: com.codechallenge.scotiabank</p>
  * <p><b>Project</b>: codechallenge</p>
  * <p><b>Version</b>: 1.0.0</p>
- * <p><b>Company</b>: Encore</p>
+ * <p><b>Company</b>: Encora</p>
  * <p><b>Creation Date</b>: 2024-06-10</p>
  * <p>@author Pablo Sergio Loyola Tantaruna</p>
  * <div>
