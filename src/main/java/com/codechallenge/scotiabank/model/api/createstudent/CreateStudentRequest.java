@@ -39,32 +39,32 @@ public class CreateStudentRequest {
             example = "1",
             type = "int",
             required = true)
-  private String id_student;
+  private String id;
 
   @Pattern("^[a-zA-Z]$")
   @ApiParam(value = "Nombre del estudiante",
           example = "Pablo",
           type = "string",
           required = true)
-  private String name_student;
+  private String nombre;
 
   @Pattern("^[a-zA-Z]$")
   @ApiParam(value = "Apellido del estudiante",
           example = "Loyola",
           type = "string",
           required = true)
-  private String last_name_student;
+  private String apellido;
 
   @ApiParam(value = "Estado del estudiante",
-          type = "int",
-          allowableValues = "0, 1",
+          type = "string",
+          allowableValues = "ACTIVO, INACTIVO",
           example = "1",
           required = true)
-  private int status_student;
+  private String estado;
 
   @ApiParam(value = "Edad del estudiante",
           type = "int",
           example = "10",
           required = true)
-  private int age_student;
+  private int edad;
 }

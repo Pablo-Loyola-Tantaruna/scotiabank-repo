@@ -44,9 +44,7 @@ public class CreateStudentServiceImpl implements CreateStudentService {
   public Mono<Void> process(CreateStudentRequest requestStudent) {
     log.info("CreateStudentServiceImpl.process");
     return studentManagementService.createStudent(requestStudent)
-           .doOnError(e -> log.error("Error creating student", e))
-           .onErrorResume(e -> Mono.error(new RuntimeException("Error creating student")))
-           .doOnSuccess(e -> log.info("Student created successfully"))
-           .then();
+            .doOnError(Mono::error)
+            .doOnSuccess(e -> log.info("Student created successfully"));
   }
 }

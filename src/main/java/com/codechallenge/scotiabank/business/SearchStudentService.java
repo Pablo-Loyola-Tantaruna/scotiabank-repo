@@ -37,5 +37,5 @@ public interface SearchStudentService {
    *
    * @return {@link SearchStudentResponse}
    */
-  Flux<Mono<SearchStudentResponse>> process();
+  Flux<SearchStudentResponse> process();
 }

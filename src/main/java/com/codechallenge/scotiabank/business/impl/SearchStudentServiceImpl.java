@@ -44,7 +44,7 @@ public class SearchStudentServiceImpl implements SearchStudentService {
   private final StudentManagementService studentManagementService;
 
   @Override
-  public Flux<Mono<SearchStudentResponse>> process() {
+  public Flux<SearchStudentResponse> process() {
     log.info("SearchStudentServiceImpl.process");
     return studentManagementService.getActiveStudents()
        .doOnError(e -> log.error("Error searching student", e));

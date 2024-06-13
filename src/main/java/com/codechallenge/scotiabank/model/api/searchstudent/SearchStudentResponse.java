@@ -31,13 +31,13 @@ import lombok.Setter;
 @Setter
 public class SearchStudentResponse {
 
-  private String id_student;
+  private String id;
 
-  private String name_student;
+  private String nombre;
 
-  private String last_name_student;
+  private String apellido;
 
-  private int status_student;
+  private String estado;
 
-  private int age_student;
+  private int edad;
 }

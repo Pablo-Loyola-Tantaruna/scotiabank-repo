@@ -51,5 +51,5 @@ public interface StudentManagementService {
    *
    * @return {@link SearchStudentResponse}
    */
-  Flux<Mono<SearchStudentResponse>> getActiveStudents();
+  Flux<SearchStudentResponse> getActiveStudents();
 }

@@ -47,11 +47,11 @@ class StudentManagementServiceImplTest {
   void testCreateStudent() {
     // Arrange
     CreateStudentRequest request = new CreateStudentRequest();
-    request.setId_student("1");
-    request.setName_student("John");
-    request.setLast_name_student("Doe");
-    request.setAge_student(20);
-    request.setStatus_student(1);
+    request.setId("1");
+    request.setNombre("John");
+    request.setApellido("Doe");
+    request.setEdad(20);
+    request.setEstado("ACTIVO");
 
     when(studentRepository.existsStudent(any())).thenReturn(Mono.just(false));
     when(studentRepository.save(any())).thenReturn(Mono.empty());
@@ -79,21 +79,14 @@ class StudentManagementServiceImplTest {
     when(studentRepository.findAll()).thenReturn(Flux.just(studentCache));
 
     // Act
-    Flux<Mono<SearchStudentResponse>> result = studentManagementService.getActiveStudents();
+    Flux<SearchStudentResponse> result = studentManagementService.getActiveStudents();
 
     // Assert
     StepVerifier.create(result)
-            .expectNextMatches(mono -> {
-              StepVerifier.create(mono)
-                      .expectNextMatches(response ->
-                              response.getId_student().equals("1") &&
-                                      response.getName_student().equals("John") &&
-                                      response.getLast_name_student().equals("Doe") &&
-                                      response.getAge_student() == 20 &&
-                                      response.getStatus_student() == 1)
-                      .verifyComplete();
-              return true;
-            })
-            .verifyComplete();
+            .expectNextMatches(response -> response.getId().equals("1") &&
+                    response.getNombre().equals("John") &&
+                    response.getApellido().equals("Doe") &&
+                    response.getEdad() == 20 &&
+                    response.getEstado().equalsIgnoreCase("ACTIVO")).verifyComplete();
   }
 }

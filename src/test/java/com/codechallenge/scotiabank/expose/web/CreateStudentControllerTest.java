@@ -33,36 +33,10 @@ public class CreateStudentControllerTest {
     webTestClient = WebTestClient.bindToController(createStudentController).build();
   }
 
-  /*@Test
-  void testCreateStudent_Success() {
-    CreateStudentRequest createStudentRequest = createStudentRequestMock();
-
-    Mockito.when(createStudentService.process(createStudentRequest)).thenReturn(Mono.empty());
-
-    webTestClient.post()
-      .uri("/new-student")
-      .bodyValue(createStudentRequest)
-      .exchange()
-      .expectStatus().isCreated();
-  }
-
-  @Test
-  void testCreateStudent_Fail() {
-    CreateStudentRequest createStudentRequest = createStudentRequestMock();
-
-    Mockito.when(createStudentService.process(createStudentRequest)).thenReturn(Mono.empty());
-
-    webTestClient.post()
-      .uri("/new-student")
-      .bodyValue(createStudentRequest)
-      .exchange()
-      .expectStatus().is5xxServerError();
-  }*/
-
   @Test
   void testCreateStudent_DuplicateId() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setId_student("1");
+    createStudentRequest.setId("1");
 
     webTestClient.post()
       .uri("/new-student")
@@ -74,7 +48,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setId_student(null);
+    createStudentRequest.setId(null);
 
     webTestClient.post()
       .uri("/new-student")
@@ -86,7 +60,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest2() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setName_student(null);
+    createStudentRequest.setNombre(null);
 
     webTestClient.post()
     .uri("/new-student")
@@ -98,7 +72,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest3() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setLast_name_student(null);
+    createStudentRequest.setApellido(null);
 
     webTestClient.post()
       .uri("/new-student")
@@ -110,7 +84,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest4() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setStatus_student(0);
+    createStudentRequest.setEstado("PABLO");
 
     webTestClient.post()
       .uri("/new-student")
@@ -122,7 +96,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest5() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setAge_student(0);
+    createStudentRequest.setEdad(0);
 
     webTestClient.post()
       .uri("/new-student")
@@ -134,8 +108,8 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest6() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setAge_student(0);
-    createStudentRequest.setStatus_student(5);
+    createStudentRequest.setEdad(0);
+    createStudentRequest.setEstado("INACTIVO");
 
     webTestClient.post()
       .uri("/new-student")
@@ -147,7 +121,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest7() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setName_student("");
+    createStudentRequest.setNombre("");
 
     webTestClient.post()
       .uri("/new-student")
@@ -159,7 +133,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest8() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setLast_name_student("");
+    createStudentRequest.setApellido("");
 
     webTestClient.post()
       .uri("/new-student")
@@ -171,7 +145,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest9() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setId_student("");
+    createStudentRequest.setId("");
 
     webTestClient.post()
       .uri("/new-student")
@@ -183,7 +157,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest10() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setId_student("   ");
+    createStudentRequest.setId("   ");
 
     webTestClient.post()
             .uri("/new-student")
@@ -195,7 +169,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest11() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setName_student("   ");
+    createStudentRequest.setNombre("   ");
 
     webTestClient.post()
             .uri("/new-student")
@@ -207,7 +181,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest12() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setLast_name_student("   ");
+    createStudentRequest.setApellido("   ");
 
     webTestClient.post()
             .uri("/new-student")
@@ -219,7 +193,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest14() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setName_student("1234567890123456789012345678901234567890"); // More than 30 characters
+    createStudentRequest.setNombre("1234567890123456789012345678901234567890"); // More than 30 characters
 
     webTestClient.post()
             .uri("/new-student")
@@ -231,7 +205,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest15() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setLast_name_student("1234567890123456789012345678901234567890"); // More than 30 characters
+    createStudentRequest.setApellido("1234567890123456789012345678901234567890"); // More than 30 characters
 
     webTestClient.post()
       .uri("/new-student")
@@ -254,7 +228,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest19() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setAge_student(-1);
+    createStudentRequest.setEdad(-1);
 
     webTestClient.post()
             .uri("/new-student")
@@ -266,7 +240,7 @@ public class CreateStudentControllerTest {
   @Test
   void testCreateStudent_InvalidRequest20() {
     CreateStudentRequest createStudentRequest = createStudentRequestMock();
-    createStudentRequest.setStatus_student(-1); // Negative status
+    createStudentRequest.setEstado("PABLO"); // Negative status
 
     webTestClient.post()
             .uri("/new-student")
@@ -277,11 +251,11 @@ public class CreateStudentControllerTest {
 
   private CreateStudentRequest createStudentRequestMock() {
     CreateStudentRequest createStudentRequest = new CreateStudentRequest();
-    createStudentRequest.setId_student("1");
-    createStudentRequest.setName_student("Pablo");
-    createStudentRequest.setLast_name_student("Loyola");
-    createStudentRequest.setStatus_student(1);
-    createStudentRequest.setAge_student(25);
+    createStudentRequest.setId("1");
+    createStudentRequest.setNombre("Pablo");
+    createStudentRequest.setApellido("Loyola");
+    createStudentRequest.setEstado("ACTIVO");
+    createStudentRequest.setEdad(25);
     return createStudentRequest;
   }
 }

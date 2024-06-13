@@ -1,5 +1,8 @@
 package com.codechallenge.scotiabank.business.impl;
 
+import static com.codechallenge.scotiabank.util.Util.validateStatus;
+import static com.codechallenge.scotiabank.util.Util.validateStatusCache;
+
 import com.codechallenge.scotiabank.business.StudentManagementService;
 import com.codechallenge.scotiabank.model.api.createstudent.CreateStudentRequest;
 import com.codechallenge.scotiabank.model.api.searchstudent.SearchStudentResponse;
@@ -11,6 +14,7 @@ import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 
 /**
  * <p> Clase que implementa la interfaz StudentManagementService.</p>
@@ -55,25 +59,38 @@ public class StudentManagementServiceImpl implements StudentManagementService {
   public Mono<Void> createStudent(CreateStudentRequest request) {
     log.info("StudentManagementServiceImpl.createStudent");
     return Mono.just(request)
-           .filterWhen(r -> existsStudent(r.getId_student()).map(exists -> !exists))
            .switchIfEmpty(Mono.error(new RuntimeException("Student already exists")))
            .flatMap(this::saveStudent)
            .then();
   }
 
+  /**
+   * M&eacute;todo que permite verificar si un alumno
+   * existe.
+   *
+   * @param studentId Identificador del alumno.
+   * @return {@link Boolean}
+   */
+
   private Mono<Boolean> existsStudent(String studentId) {
-    log.info("StudentManagementServiceImpl.existsStudent");
+    log.info("StudentManagementServiceImpl.existsStudent" + studentId);
     return studentRepository.existsStudent(studentId);
   }
 
+  /**
+   * M&eacute;todo que permite guardar un alumno.
+   *
+   * @param request Informaci&oacute;n del alumno.
+   * @return void mono
+   */
   private Mono<Void> saveStudent(CreateStudentRequest request) {
     log.info("StudentManagementServiceImpl.saveStudent");
     StudentCache studentCache = StudentCache.builder()
-            .id_student(request.getId_student())
-            .name_student(request.getName_student())
-            .last_name_student(request.getLast_name_student())
-            .age_student(request.getAge_student())
-            .status_student(request.getStatus_student())
+            .id_student(request.getId())
+            .name_student(request.getNombre())
+            .last_name_student(request.getApellido())
+            .age_student(request.getEdad())
+            .status_student(validateStatus(request.getEstado()))
             .build();
 
     return studentRepository.save(studentCache)
@@ -89,21 +106,27 @@ public class StudentManagementServiceImpl implements StudentManagementService {
    * @return {@link SearchStudentResponse}
    */
   @Override
-  public Flux<Mono<SearchStudentResponse>> getActiveStudents() {
+  public Flux<SearchStudentResponse> getActiveStudents() {
     log.info("StudentManagementServiceImpl.getActiveStudents");
     return studentRepository.findAll()
-           .flatMap(Flux::just)
            .filter(studentCache -> studentCache.getStatus_student() == 1)
-           .map(studentCache -> Mono.just(cacheToResponse(studentCache)));
+           .map(this::cacheToResponse);
   }
 
+  /**
+   * M&eacute;todo que permite mapear un objeto StudentCache
+   * a un objeto SearchStudentResponse.
+   *
+   * @param studentCache Informaci&oacute;n del alumno.
+   * @return {@link SearchStudentResponse}
+   */
   private SearchStudentResponse cacheToResponse(StudentCache studentCache) {
     SearchStudentResponse searchStudentResponse = new SearchStudentResponse();
-    searchStudentResponse.setId_student(studentCache.getId_student());
-    searchStudentResponse.setName_student(studentCache.getName_student());
-    searchStudentResponse.setLast_name_student(studentCache.getLast_name_student());
-    searchStudentResponse.setAge_student(studentCache.getAge_student());
-    searchStudentResponse.setStatus_student(studentCache.getStatus_student());
+    searchStudentResponse.setId(studentCache.getId_student());
+    searchStudentResponse.setNombre(studentCache.getName_student());
+    searchStudentResponse.setApellido(studentCache.getLast_name_student());
+    searchStudentResponse.setEdad(studentCache.getAge_student());
+    searchStudentResponse.setEstado(validateStatusCache(studentCache.getStatus_student()));
     return searchStudentResponse;
   }
 }

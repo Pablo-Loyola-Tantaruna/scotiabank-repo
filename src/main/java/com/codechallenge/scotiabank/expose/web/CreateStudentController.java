@@ -2,6 +2,8 @@ package com.codechallenge.scotiabank.expose.web;
 
 import com.codechallenge.scotiabank.business.CreateStudentService;
 import com.codechallenge.scotiabank.model.api.createstudent.CreateStudentRequest;
+import com.codechallenge.scotiabank.model.error.ErrorResponse;
+import com.codechallenge.scotiabank.util.error.HandleError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +15,7 @@ import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -91,9 +95,10 @@ public class CreateStudentController {
   public Mono<Void> createStudent(
           @ParameterObject
           @RequestBody CreateStudentRequest createStudentRequest) {
-    return createStudentService.process(createStudentRequest)
-            .doOnError(error -> log.error("Error creating student", error))
-            .doOnSuccess(e -> log.info("Student created successfully"))
-            .then();
+    return createStudentService
+        .process(createStudentRequest)
+        .doOnError(error -> log.error("Error creating student", error))
+        .doOnSuccess(e -> log.info("Student created successfully"))
+        .then();
   }
 }

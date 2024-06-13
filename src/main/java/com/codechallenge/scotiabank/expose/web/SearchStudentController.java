@@ -86,7 +86,7 @@ public class SearchStudentController {
           description = "Servicio no disponible",
           content = @Content(schema = @Schema(implementation = Exception.class))) })
   @ResponseStatus(HttpStatus.OK)
-  public Flux<Mono<SearchStudentResponse>> searchStudent() {
+  public Flux<SearchStudentResponse> searchStudent() {
     return searchStudentService.process()
         .doOnError(error -> log.error("Error getting students", error))
         .doOnComplete(() -> log.info("Student getting process successfully completed"))

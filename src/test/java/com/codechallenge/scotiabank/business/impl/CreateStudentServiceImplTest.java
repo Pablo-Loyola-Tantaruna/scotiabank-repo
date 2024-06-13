@@ -58,11 +58,11 @@ public class CreateStudentServiceImplTest {
   @Test
   public void testProcess_NullId() {
     CreateStudentRequest createStudentRequest = new CreateStudentRequest();
-    createStudentRequest.setId_student(null);
-    createStudentRequest.setName_student(null);
-    createStudentRequest.setLast_name_student(null);
-    createStudentRequest.setAge_student(-1);
-    createStudentRequest.setStatus_student(-1);
+    createStudentRequest.setId(null);
+    createStudentRequest.setNombre(null);
+    createStudentRequest.setApellido(null);
+    createStudentRequest.setEdad(-1);
+    createStudentRequest.setEstado("PABLO");
 
     assertThrows(NullPointerException.class, () -> createStudentServiceImpl.process(createStudentRequest).block());
   }
@@ -70,22 +70,22 @@ public class CreateStudentServiceImplTest {
   @Test
   public void testProcess_EmptyValues() {
     CreateStudentRequest createStudentRequest = new CreateStudentRequest();
-    createStudentRequest.setId_student("");
-    createStudentRequest.setName_student("");
-    createStudentRequest.setLast_name_student("");
-    createStudentRequest.setAge_student(0);
-    createStudentRequest.setStatus_student(0);
+    createStudentRequest.setId("");
+    createStudentRequest.setNombre("");
+    createStudentRequest.setApellido("");
+    createStudentRequest.setEdad(0);
+    createStudentRequest.setEstado("");
 
     assertThrows(NullPointerException.class, () -> createStudentServiceImpl.process(createStudentRequest).block());
   }
 
   private CreateStudentRequest studentRequestMock() {
     CreateStudentRequest createStudentRequest = new CreateStudentRequest();
-    createStudentRequest.setId_student("1");
-    createStudentRequest.setName_student("John");
-    createStudentRequest.setLast_name_student("Lenon");
-    createStudentRequest.setAge_student(20);
-    createStudentRequest.setStatus_student(1);
+    createStudentRequest.setId("1");
+    createStudentRequest.setNombre("John");
+    createStudentRequest.setApellido("Lenon");
+    createStudentRequest.setEdad(20);
+    createStudentRequest.setEstado("ACTIVO");
     return createStudentRequest;
   }
 }
