@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
  * <p> Esta clase se encarga de la obtenci&oacute;n de alumnos.</p>
  * <p><b>Class</b>: SearchStudentServiceImpl</p>
  * <p><b>Package</b>: com.codechallenge.scotiabank.business.impl</p>
- * <p><b>Project</b>: codechallenge/p>
+ * <p><b>Project</b>: codechallenge</p>
  * <p><b>Version</b>: 1.0.0</p>
  * <p><b>Creation Date</b>: 2024-06-11</p>
  * <p><b>Copyright</b>: Encora</p>
@@ -41,13 +41,13 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class SearchStudentServiceImpl implements SearchStudentService {
 
-    private final StudentManagementService studentManagementService;
+  private final StudentManagementService studentManagementService;
 
-    @Override
-    public Flux<Mono<SearchStudentResponse>> process() {
-        log.info("SearchStudentServiceImpl.process");
-        return studentManagementService.getActiveStudents()
-                .doOnError(e -> log.error("Error searching student", e));
-    }
+  @Override
+  public Flux<Mono<SearchStudentResponse>> process() {
+    log.info("SearchStudentServiceImpl.process");
+    return studentManagementService.getActiveStudents()
+       .doOnError(e -> log.error("Error searching student", e));
+  }
 }
 

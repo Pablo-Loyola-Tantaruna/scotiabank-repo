@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
  * <p> Esta clase se encarga de gestionar la creación de alumnos.</p>
  * <p><b>Class</b>: CreateStudentServiceImpl</p>
  * <p><b>Package</b>: com.codechallenge.scotiabank.business.impl</p>
- * <p><b>Project</b>: codechallenge/p>
+ * <p><b>Project</b>: codechallenge</p>
  * <p><b>Version</b>: 1.0.0</p>
  * <p><b>Creation Date</b>: 2024-06-11</p>
  * <p><b>Copyright</b>: Encora</p>
@@ -39,11 +39,14 @@ import reactor.core.publisher.Mono;
 public class CreateStudentServiceImpl implements CreateStudentService {
 
   private final StudentManagementService studentManagementService;
+
   @Override
   public Mono<Void> process(CreateStudentRequest requestStudent) {
     log.info("CreateStudentServiceImpl.process");
     return studentManagementService.createStudent(requestStudent)
            .doOnError(e -> log.error("Error creating student", e))
-           .doOnSuccess(e -> log.info("Student created successfully"));
+           .onErrorResume(e -> Mono.error(new RuntimeException("Error creating student")))
+           .doOnSuccess(e -> log.info("Student created successfully"))
+           .then();
   }
 }

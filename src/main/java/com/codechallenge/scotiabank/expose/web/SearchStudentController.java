@@ -14,7 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.DataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -53,6 +57,7 @@ import reactor.core.scheduler.Schedulers;
 public class SearchStudentController {
 
   private final SearchStudentService searchStudentService;
+
   @InitBinder
   public void initBinder(DataBinder dataBinder) {
     dataBinder.setDisallowedFields();
@@ -61,27 +66,27 @@ public class SearchStudentController {
   /**
    * Met&oacute;do que permite la obtenci&oacute;n de los alumnos.
    *
-   * @return Flux<Mono<SearchStudentResponse>>
+   * @return {@link SearchStudentResponse}
    */
   @GetMapping
-  /*@Operation(tags = "SearchStudentResponse",
+  @Operation(tags = "SearchStudentResponse",
       summary = "Se obtuvo la lista de estudiantes correctamente",
       method = "GET",
       description = "classpath:swagger/notes/search-student.md",
       responses = {
-          @ApiResponse(responseCode = "200",
-              description = "Se obtuvo la lista de estudiantes correctamente"),
-          @ApiResponse(responseCode = "400",
-              description = "La solicitud es incorrecta",
-              content = @Content(schema = @Schema(implementation = ApiException.class))),
-          @ApiResponse(responseCode = "500",
-              description = "Error interno del servidor",
-              content = @Content(schema = @Schema(implementation = ApiException.class))),
-          @ApiResponse(responseCode = "503",
-              description = "Servicio no disponible",
-              content = @Content(schema = @Schema(implementation = ApiException.class))) })*/
+        @ApiResponse(responseCode = "200",
+          description = "Se obtuvo la lista de estudiantes correctamente"),
+        @ApiResponse(responseCode = "400",
+          description = "La solicitud es incorrecta",
+          content = @Content(schema = @Schema(implementation = Exception.class))),
+        @ApiResponse(responseCode = "500",
+          description = "Error interno del servidor",
+          content = @Content(schema = @Schema(implementation = Exception.class))),
+        @ApiResponse(responseCode = "503",
+          description = "Servicio no disponible",
+          content = @Content(schema = @Schema(implementation = Exception.class))) })
   @ResponseStatus(HttpStatus.OK)
-  public Flux<Mono<SearchStudentResponse>> SearchStudent() {
+  public Flux<Mono<SearchStudentResponse>> searchStudent() {
     return searchStudentService.process()
         .doOnError(error -> log.error("Error getting students", error))
         .doOnComplete(() -> log.info("Student getting process successfully completed"))

@@ -4,9 +4,10 @@ import com.codechallenge.scotiabank.business.StudentManagementService;
 import com.codechallenge.scotiabank.model.api.createstudent.CreateStudentRequest;
 import com.codechallenge.scotiabank.model.api.searchstudent.SearchStudentResponse;
 import com.codechallenge.scotiabank.model.cache.StudentCache;
-import com.codechallenge.scotiabank.repository.CacheRepository;
+import com.codechallenge.scotiabank.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,7 +17,7 @@ import reactor.core.publisher.Mono;
  * <p> Esta Clase se encarga de gestionar las operaciones de alumnos.</p>
  * <p><b>Class</b>: StudentManagementServiceImpl</p>
  * <p><b>Package</b>: com.codechallenge.scotiabank.business.impl</p>
- * <p><b>Project</b>: codechallenge/p>
+ * <p><b>Project</b>: codechallenge</p>
  * <p><b>Version</b>: 1.0.0</p>
  * <p><b>Creation Date</b>: 2024-06-11</p>
  * <p><b>Copyright</b>: Encora</p>
@@ -41,7 +42,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class StudentManagementServiceImpl implements StudentManagementService {
 
-  private final CacheRepository cacheRepository;
+  private final StudentRepository studentRepository;
+
   /**
    * M&eacute;todo que permite la creaci&oacute;n de
    * un alumno.
@@ -55,12 +57,13 @@ public class StudentManagementServiceImpl implements StudentManagementService {
     return Mono.just(request)
            .filterWhen(r -> existsStudent(r.getId_student()).map(exists -> !exists))
            .switchIfEmpty(Mono.error(new RuntimeException("Student already exists")))
-           .flatMap(this::saveStudent);
+           .flatMap(this::saveStudent)
+           .then();
   }
 
   private Mono<Boolean> existsStudent(String studentId) {
     log.info("StudentManagementServiceImpl.existsStudent");
-    return cacheRepository.existsById(studentId);
+    return studentRepository.existsStudent(studentId);
   }
 
   private Mono<Void> saveStudent(CreateStudentRequest request) {
@@ -73,19 +76,23 @@ public class StudentManagementServiceImpl implements StudentManagementService {
             .status_student(request.getStatus_student())
             .build();
 
-    return cacheRepository.save(studentCache).then();
+    return studentRepository.save(studentCache)
+           .doOnSuccess(success -> log.info("Student saved successfully"))
+           .doOnError(error -> log.error("Error saving student: " + error))
+           .then();
   }
 
   /**
    * M&eacute;todo que permite la obtenci&oacute;n de
    * los alumnos activos.
    *
-   * @return Flux<Mono<StudentResponse>>
+   * @return {@link SearchStudentResponse}
    */
   @Override
   public Flux<Mono<SearchStudentResponse>> getActiveStudents() {
     log.info("StudentManagementServiceImpl.getActiveStudents");
-    return cacheRepository.findAll()
+    return studentRepository.findAll()
+           .flatMap(Flux::just)
            .filter(studentCache -> studentCache.getStatus_student() == 1)
            .map(studentCache -> Mono.just(cacheToResponse(studentCache)));
   }

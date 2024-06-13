@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
  * de la creación de alumno.</p>
  * <p><b>Class</b>: CreateStudentService</p>
  * <p><b>Package</b>: com.codechallenge.scotiabank.business</p>
- * <p><b>Project</b>: codechallenge/p>
+ * <p><b>Project</b>: codechallenge</p>
  * <p><b>Version</b>: 1.0.0</p>
  * <p><b>Creation Date</b>: 2024-06-11</p>
  * <p><b>Copyright</b>: Encora</p>

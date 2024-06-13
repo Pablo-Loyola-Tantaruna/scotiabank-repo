@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
  * de la gesti&oacute;n de operaciones de alumnos.</p>
  * <p><b>Class</b>: StudentManagementService</p>
  * <p><b>Package</b>: com.codechallenge.scotiabank.business</p>
- * <p><b>Project</b>: codechallenge/p>
+ * <p><b>Project</b>: codechallenge</p>
  * <p><b>Version</b>: 1.0.0</p>
  * <p><b>Creation Date</b>: 2024-06-11</p>
  * <p><b>Copyright</b>: Encora</p>
@@ -49,7 +49,7 @@ public interface StudentManagementService {
    * M&eacute;todo que permite la obtenci&oacute;n de
    * los alumnos activos.
    *
-   * @return Flux<Mono<StudentResponse>>
+   * @return {@link SearchStudentResponse}
    */
   Flux<Mono<SearchStudentResponse>> getActiveStudents();
 }

@@ -1,1 +1,30 @@
-spring.application.name=scotiabank
+spring:
+  application:
+    name: scotiabank
+  redis:
+    host: e2dc8808399c3845464e5fed1c107d64866a4d3bb82cd74e0767c87c4b1d6083
+    port: 6379
+  config:
+    import:
+      configserver: http://localhost:8080
+  cloud:
+    config:
+      enabled: false
+      allow-override: true
+      overrideNone: true
+      overrideSystemProperties: false
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+server:
+  port: 8083
+sonar:
+  projectKey: CodeChallenge12345
+  projectName: CodeChallenge
+  sourceEncoding: UTF-8
+  host:
+    url: http://localhost:9000
+  login: admin
+  sources: .
+  token: squ_84d5eab80ef46ffd731f37120d3d5aa9c615042a
+  password: administrador

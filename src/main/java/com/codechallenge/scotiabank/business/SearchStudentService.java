@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
  * de la obtenci&oacute;n de alumnos.</p>
  * <p><b>Class</b>: SearchStudentService</p>
  * <p><b>Package</b>: com.codechallenge.scotiabank.business</p>
- * <p><b>Project</b>: codechallenge/p>
+ * <p><b>Project</b>: codechallenge</p>
  * <p><b>Version</b>: 1.0.0</p>
  * <p><b>Creation Date</b>: 2024-06-11</p>
  * <p><b>Copyright</b>: Encora</p>
@@ -32,10 +32,10 @@ import reactor.core.publisher.Mono;
  */
 public interface SearchStudentService {
 
-    /**
-     * M&eacute;todo que permite la obtenci&oacute;n de los alumnos.
-     *
-     * @return Flux<Mono<SearchStudentResponse>>
-     */
-    Flux<Mono<SearchStudentResponse>> process();
+  /**
+   * M&eacute;todo que permite la obtenci&oacute;n de los alumnos.
+   *
+   * @return {@link SearchStudentResponse}
+   */
+  Flux<Mono<SearchStudentResponse>> process();
 }

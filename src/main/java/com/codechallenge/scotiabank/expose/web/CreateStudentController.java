@@ -14,7 +14,12 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.DataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -52,6 +57,7 @@ import reactor.core.scheduler.Schedulers;
 public class CreateStudentController {
 
   private final CreateStudentService createStudentService;
+
   @InitBinder
   public void initBinder(DataBinder dataBinder) {
     dataBinder.setDisallowedFields();
@@ -65,22 +71,22 @@ public class CreateStudentController {
    */
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  /*@Operation(tags = "CreateStudentResponse",
-          summary = "Se cre&oacute; un nuevo estudiante correctamente",
-          method = "POST",
-          description = "classpath:swagger/notes/create-student.md",
-          responses = {
-                  @ApiResponse(responseCode = "201",
-                          description = "El producto fue creado correctamente"),
-                  @ApiResponse(responseCode = "400",
-                          description = "La solicitud es incorrecta",
-                          content = @Content(schema = @Schema(implementation = ApiException.class))),
-                  @ApiResponse(responseCode = "500",
-                          description = "Error interno del servidor",
-                          content = @Content(schema = @Schema(implementation = ApiException.class))),
-                  @ApiResponse(responseCode = "503",
-                          description = "Servicio no disponible",
-                          content = @Content(schema = @Schema(implementation = ApiException.class))) })*/
+  @Operation(tags = "CreateStudentResponse",
+      summary = "Se cre&oacute; un nuevo estudiante correctamente",
+      method = "POST",
+      description = "classpath:swagger/notes/create-student.md",
+      responses = {
+        @ApiResponse(responseCode = "201",
+          description = "El producto fue creado correctamente"),
+        @ApiResponse(responseCode = "400",
+          description = "La solicitud es incorrecta",
+          content = @Content(schema = @Schema(implementation = Exception.class))),
+        @ApiResponse(responseCode = "500",
+          description = "Error interno del servidor",
+          content = @Content(schema = @Schema(implementation = Exception.class))),
+        @ApiResponse(responseCode = "503",
+          description = "Servicio no disponible",
+          content = @Content(schema = @Schema(implementation = Exception.class))) })
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<Void> createStudent(
           @ParameterObject
@@ -88,7 +94,6 @@ public class CreateStudentController {
     return createStudentService.process(createStudentRequest)
             .doOnError(error -> log.error("Error creating student", error))
             .doOnSuccess(e -> log.info("Student created successfully"))
-            .doOnTerminate(() -> log.info("Student creation process finished"))
-            .subscribeOn(Schedulers.boundedElastic());
+            .then();
   }
 }
